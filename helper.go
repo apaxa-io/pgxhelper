@@ -8,8 +8,8 @@ import (
 const stmtNamePrefix = "stmt"
 var stmtNum uint = 0
 
-// PgxPreparer interface can hold any object that possible prepare SQL statements.
-// Currently (and primary used for) it can hold pgx.Conn & pgx.ConnPool.
+// PgxPreparer interface can hold any object that can prepare SQL statements.
+// Currently (and is primary used for) it can hold pgx.Conn & pgx.ConnPool.
 type PgxPreparer interface {
 	Prepare(name, sql string) (*pgx.PreparedStatement, error)
 }
