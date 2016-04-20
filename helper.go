@@ -1,6 +1,12 @@
 package pgxhelper
 
-import "github.com/jackc/pgx"
+import (
+	"github.com/jackc/pgx"
+	"github.com/apaxa-io/strconvhelper"
+)
+
+const stmtNamePrefix = "stmt"
+var stmtNum uint = 0
 
 // PgxPreparer interface can hold any object that possible prepare SQL statements.
 // Currently (and primary used for) it can hold pgx.Conn & pgx.ConnPool.
@@ -10,9 +16,10 @@ type PgxPreparer interface {
 
 // MustPrepare is like pgxConn[Pool].Prepare but panics if the SQL cannot be parsed.
 // It simplifies safe initialization of global variables holding prepared statements.
-// It also assign name to prepared statement (currently name is SQL itself, but it is subject to change in near future).
+// It also assign name to prepared statement (currently name is "stmt<number>").
 func MustPrepare(p PgxPreparer, sql string) (stmtName string) {
-	stmtName = sql // TODO may be use some other naming rule?
+	stmtName = stmtNamePrefix+strconvhelper.FormatUint(stmtNum)
+	stmtNum++
 	if _, err := p.Prepare(stmtName, sql); err != nil {
 		panic(`pgxhelper: Prepare(` + sql + `): ` + err.Error())
 	}
