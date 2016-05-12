@@ -1,8 +1,8 @@
 package pgxhelper
 
 import (
-	"github.com/jackc/pgx"
 	"github.com/apaxa-io/databasehelper/sqlhelper"
+	"github.com/jackc/pgx"
 )
 
 // PgxQueryer interface can hold any object that can query SQL statements.
