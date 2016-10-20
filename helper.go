@@ -26,3 +26,25 @@ func MustPrepare(p PgxPreparer, sql string) (stmtName string) {
 	}
 	return
 }
+
+// MustPrepareAll is like MustPrepare but accept multiple sql to prepare.
+// It return slice of statements names.
+func MustPrepareAll(p PgxPreparer, sqls ...string) (stmtNames []string) {
+	stmtNames = make([]string, len(sqls))
+	for i, sql := range sqls {
+		stmtNames[i] = MustPrepare(p, sql)
+	}
+	return
+}
+
+// MustPrepareInPlace is modification of MustPrepare with resulting statement name stored in original string with sql.
+func MustPrepareInPlace(p PgxPreparer, stmt *string) {
+	*stmt = MustPrepare(p, *stmt)
+}
+
+// MustPrepareAllInPlace is modification of MustPrepareAll with resulting statements names stored in original strings with sql.
+func MustPrepareAllInPlace(p PgxPreparer, stmts ...*string) {
+	for _, stmt := range stmts {
+		MustPrepareInPlace(p, stmt)
+	}
+}
